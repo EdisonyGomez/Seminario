@@ -2,7 +2,7 @@ package core;
 
 import encriptadores.ExceptionDialog;
 import encriptadores.SourceFileNotDeletedDuringDecryption;
-import encriptadores.SourceFileNotDeletedDuringEncryption;
+//import encriptadores.SourceFileNotDeletedDuringEncryption;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -120,9 +120,9 @@ public class FileEncryptorAndDecryptor {
                 progressOfFilesTextField.setText(progressOfFilesTextField.getText().substring(0, progressOfFilesTextField.getText().length() - 5) + "100%\n");
                 fileReader.close();
                 fileWriter.close();
-                if (!file.delete()) {
+                /*if (!file.delete()) {
                     new SourceFileNotDeletedDuringEncryption(new javax.swing.JFrame(), true, file.getAbsolutePath()).setVisible(true);
-                }
+                }*/
 
             } catch (NoSuchAlgorithmException e) {
                 new ExceptionDialog("NoSuchAlgorithmException!", "Algo inesperado salió terriblemente mal", e).setVisible(true);

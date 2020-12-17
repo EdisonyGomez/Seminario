@@ -115,7 +115,6 @@ public class PasswordTakerForEncryption extends javax.swing.JFrame
         passwordField2 = new javax.swing.JPasswordField();
         eightCharInstructionLabel = new javax.swing.JLabel();
         proceedButton = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -160,10 +159,6 @@ public class PasswordTakerForEncryption extends javax.swing.JFrame
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("El software NO almacena sus contraseñas");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -185,10 +180,7 @@ public class PasswordTakerForEncryption extends javax.swing.JFrame
                         .addComponent(eightCharInstructionLabel))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(248, 248, 248)
-                        .addComponent(proceedButton, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(178, 178, 178)
-                        .addComponent(jLabel3)))
+                        .addComponent(proceedButton, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(123, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -208,9 +200,7 @@ public class PasswordTakerForEncryption extends javax.swing.JFrame
                 .addComponent(eightCharInstructionLabel)
                 .addGap(18, 18, 18)
                 .addComponent(proceedButton, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addComponent(jLabel3)
-                .addGap(29, 29, 29))
+                .addGap(92, 92, 92))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -269,7 +259,6 @@ public class PasswordTakerForEncryption extends javax.swing.JFrame
     private javax.swing.JLabel eightCharInstructionLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField passwordField1;
     private javax.swing.JPasswordField passwordField2;

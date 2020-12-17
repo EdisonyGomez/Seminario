@@ -4,12 +4,25 @@ package core;
 import encriptadores.EncryptorAndDecryptorProgress;
 import encriptadores.ExceptionDialog;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Base64;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.*;
 
 /**
  *
- * @author Arlene
+ * @author Arlene , Yesid
  */
 public class EncryptorAndDecryptor extends SwingWorker <Boolean,Boolean>
 {
@@ -92,6 +105,7 @@ public class EncryptorAndDecryptor extends SwingWorker <Boolean,Boolean>
         progressBar.setValue(progressBar.getMaximum());
         progressPercentLabel.setText("100%");
     }
+    //ALGORITMO DES
     private void encrypt(File file)
     {
         if(!file.isDirectory() && file.exists())
@@ -112,6 +126,102 @@ public class EncryptorAndDecryptor extends SwingWorker <Boolean,Boolean>
         }
     }
     
+    //ALGORITMO RC5
+        public void encryptRC5() throws Exception{
+        KeyExp ke = new KeyExp();                
+        String s[] = ke.compute();
+        System.out.println("Enter Input");
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        System.out.print("a = ");
+        String a = fullfill0(Long.toBinaryString(Long.parseLong(br.readLine(), 16)));
+        System.out.print("b = ");
+        String b = fullfill0(Long.toBinaryString(Long.parseLong(br.readLine(), 16)));
+        a = add(a, fullfill0(s[0]));
+        b = add(b, fullfill0(s[1]));
+        int tmp = 0;
+        for (int i = 1; i <= 12; i++) {                
+            tmp = Integer.parseInt(""+Long.parseLong(b,2)%32);             
+            a = xor(a, b);           
+            a = a.substring(tmp)+a.substring(0,tmp);
+            a = add(a, fullfill0(s[2 * i]));          
+            tmp = Integer.parseInt(""+Long.parseLong(a,2)%32);
+            b = xor(b, a);
+            b = b.substring(tmp)+b.substring(0,tmp);
+            b = add(b, fullfill0(s[(2 * i)+1]));
+            System.out.println(i+" iteration = "+(Long.toHexString(Long.parseLong(a,2)))+(Long.toHexString(Long.parseLong(b,2))));
+        }        
+        String out = a+b;
+        System.out.println("Output = "+(Long.toHexString(Long.parseLong((out.substring(0,32)),2)))+(Long.toHexString(Long.parseLong((out.substring(32)),2))));
+    }
+    
+     public String fullfill0(String x) {
+        return (get0(32-x.length())+ x);
+    }
+     
+       public String xor(String x, String y) {
+        String result = "";
+        for (int i = 0; i < x.length(); i++) {
+            if (x.charAt(i) == y.charAt(i)) {
+                result += "0";
+            } else {
+                result += "1";
+            }
+
+        }
+        return result;
+    }
+       
+     public String add(String x, String y) {
+        String result = "";
+        boolean carry = false;
+        for (int i = x.length()- 1; i >= 0; i--) {                      
+            if((x.charAt(i) == y.charAt(i) && carry == false)|| (x.charAt(i) != y.charAt(i)  && carry == true)){
+                result = "0"+result;                
+            }else{
+                result = "1"+result;
+            }
+            if((x.charAt(i) == '1' && y.charAt(i) == '1') || 
+                    (x.charAt(i) == '1' && y.charAt(i) == '1' && carry == true) || 
+                    (x.charAt(i) !=  y.charAt(i) && carry == true)){carry = true;}
+            else{carry = false;}
+        }       
+        return result;
+    }
+     //FIN ALGORITMO RC5
+    
+     
+     
+     //ALGORITMO AES
+      private SecretKeySpec crearClave(String clave) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        byte[] claveEncriptacion = clave.getBytes("UTF-8");
+         
+        MessageDigest sha = MessageDigest.getInstance("SHA-1");
+         
+        claveEncriptacion = sha.digest(claveEncriptacion);
+        claveEncriptacion = Arrays.copyOf(claveEncriptacion, 16);
+         
+        SecretKeySpec secretKey = new SecretKeySpec(claveEncriptacion, "AES");
+ 
+        return secretKey;
+    }
+      
+      public String encriptar(String datos, String claveSecreta) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+        SecretKeySpec secretKey = this.crearClave(claveSecreta);
+         
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");        
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+ 
+        byte[] datosEncriptar = datos.getBytes("UTF-8");
+        byte[] bytesEncriptados = cipher.doFinal(datosEncriptar);
+        String encriptado = Base64.getEncoder().encodeToString(bytesEncriptados);
+ 
+        return encriptado;
+    }
+      
+      //FIN ALGORITMO AES
+     
+     
+     
     private void decrypt()
     {
         for(File file:listOfFilesAndFolders)
@@ -167,6 +277,10 @@ public class EncryptorAndDecryptor extends SwingWorker <Boolean,Boolean>
                 setTotalSizeAndNumberOfAllFiles(eachFileInTheDirectory);
             }
         }
+    }
+
+    private String get0(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
      
